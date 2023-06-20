@@ -1,56 +1,56 @@
 {
     "FOLDER_PATHS": {
-        "DIR": "..\\Data_analysis\\data",
-        "ROOT1": "..\\Data_analysis\\data\\ccdb",
-        "ROOT2": "..\\Data_analysis\\data\\ifadv",
-        "ROOT3": "..\\Data_analysis\\data\\ndc"
+        "DIR": "..\\S-L-Dynamics-Analysis\\data",
+        "ROOT1": "..\\S-L-Dynamics-Analysis\\data\\ccdb",
+        "ROOT2": "..\\S-L-Dynamics-Analysis\\data\\ifadv",
+        "ROOT3": "..\\S-L-Dynamics-Analysis\\data\\ndc"
     },
     "DATABASES_PATHS": {
         "ccdb_paths": [
-            "..\\Data_analysis\\data\\ccdb\\P12_P2_1402_dizzy.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P12_P2_1402_monk.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P16_P6_0903_dizzy.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P16_P6_0903_monk.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P18_P1_2102_dizzy.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P18_P1_2102_monk.eaf"
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P12_P2_1402_dizzy.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P12_P2_1402_monk.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P16_P6_0903_dizzy.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P16_P6_0903_monk.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P18_P1_2102_dizzy.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P18_P1_2102_monk.eaf"
         ],
         "ifadv_paths": [
-            "..\\Data_analysis\\data\\ifadv\\DVA1A.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVA2C.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVA5G.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVB1B.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVB2D.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVB5H.eaf"
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVA1A.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVA2C.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVA5G.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVB1B.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVB2D.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVB5H.eaf"
         ],
         "ndc_paths": [
-            "..\\Data_analysis\\data\\ndc\\8_1_A_M.eaf",
-            "..\\Data_analysis\\data\\ndc\\8_1_B_M.eaf",
-            "..\\Data_analysis\\data\\ndc\\8_2_A_M.eaf",
-            "..\\Data_analysis\\data\\ndc\\8_2_B_M.eaf"
+            "..\\S-L-Dynamics-Analysis\\data\\ndc\\8_1_A_M.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ndc\\8_1_B_M.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ndc\\8_2_A_M.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ndc\\8_2_B_M.eaf"
         ]
     },
     "DATABASES_PAIR_PATHS": {
         "ccdb_pairs": [
-            "..\\Data_analysis\\data\\ccdb\\P12_P2_1402_dizzy.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P12_P2_1402_monk.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P16_P6_0903_dizzy.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P16_P6_0903_monk.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P18_P1_2102_dizzy.eaf",
-            "..\\Data_analysis\\data\\ccdb\\P18_P1_2102_monk.eaf"
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P12_P2_1402_dizzy.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P12_P2_1402_monk.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P16_P6_0903_dizzy.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P16_P6_0903_monk.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P18_P1_2102_dizzy.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ccdb\\P18_P1_2102_monk.eaf"
         ],
         "ifadv_pairs": [
-            "..\\Data_analysis\\data\\ifadv\\DVA1A.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVB1B.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVA2C.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVB2D.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVA5G.eaf",
-            "..\\Data_analysis\\data\\ifadv\\DVB5H.eaf"
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVA1A.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVB1B.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVA2C.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVB2D.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVA5G.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ifadv\\DVB5H.eaf"
         ],
         "ndc_pairs": [
-            "..\\Data_analysis\\data\\ndc\\8_1_A_M.eaf",
-            "..\\Data_analysis\\data\\ndc\\8_1_B_M.eaf",
-            "..\\Data_analysis\\data\\ndc\\8_2_A_M.eaf",
-            "..\\Data_analysis\\data\\ndc\\8_2_B_M.eaf"
+            "..\\S-L-Dynamics-Analysis\\data\\ndc\\8_1_A_M.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ndc\\8_1_B_M.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ndc\\8_2_A_M.eaf",
+            "..\\S-L-Dynamics-Analysis\\data\\ndc\\8_2_B_M.eaf"
         ]
     },
     "TIER_LISTS": {
