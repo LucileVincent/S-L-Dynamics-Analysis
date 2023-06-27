@@ -2844,6 +2844,8 @@ def give_mimicry_folder2(folder, database_pairs, function1, function2, tierA, ti
             count_proba.append(give_mimicry(LA, LB, delta_t))
         elif mimic_choice=='B/A':
             count_proba.append(give_mimicry(LB, LA, delta_t))
+        elif mimic_choice is None:
+            count_proba.append(give_mimicry(LA, LB, delta_t))
         n+=2
     M=[]
     for i in count_proba:
@@ -2965,6 +2967,8 @@ def give_mimicry_folder4(folder, database_pairs, function1, function2, tierA, ti
             count_proba.append(give_mimicry(LA, LB, delta_t))
         elif mimic_choice=='B/A':
             count_proba.append(give_mimicry(LB, LA, delta_t))
+        elif mimic_choice is None:
+            count_proba.append(give_mimicry(LA, LB, delta_t))
         n+=2
     M=[]
     for i in count_proba:
