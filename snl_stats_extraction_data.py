@@ -2791,7 +2791,7 @@ def give_mimicry_folder1(function, folder, filter=None, label=None):
         M.append(i)
     return M
 
-def give_mimicry_folder2(folder, database_pairs, function1, function2, tierA, tierB, filter=None, label=None, delta_t=0):
+def give_mimicry_folder2(folder, database_pairs, function1, function2, tierA, tierB, filter=None, label=None, delta_t=0, mimic_choice=None):
     """ The function calculate the mimicry between two lists.
     
     Args:
@@ -2806,7 +2806,8 @@ def give_mimicry_folder2(folder, database_pairs, function1, function2, tierA, ti
         it represents the intensities we want to keep. Defaults to None.
         delta_t (int, optional): Defaults to 0.
                                 Time after which expression occuring still counts as mimicry.
-                                Should be in the same unit as the times in lstA and lstB 
+                                Should be in the same unit as the times in lstA and lstB
+        mimic_choice (string, optional): It has to be B/A (A mimicking B) or A/B (B mimicking A). Defaults to None. 
     Returns:
         list: A list of tuples [(count, probability),....]
     """
@@ -2839,7 +2840,10 @@ def give_mimicry_folder2(folder, database_pairs, function1, function2, tierA, ti
             LA.append((0, 0, 0, 0))
         if len(LB)==0:
             LB.append((0, 0, 0, 0))
-        count_proba.append(give_mimicry(LA, LB, delta_t))
+        if mimic_choice=='A/B':
+            count_proba.append(give_mimicry(LA, LB, delta_t))
+        elif mimic_choice=='B/A':
+            count_proba.append(give_mimicry(LB, LA, delta_t))
         n+=2
     M=[]
     for i in count_proba:
@@ -2905,7 +2909,7 @@ def give_mimicry_folder3(folder, database_pairs, function1, function2, tierA, ti
         M.append(i)
     return M
 
-def give_mimicry_folder4(folder, database_pairs, function1, function2, tierA, tierB, tier_filter, entity1, entity2, filter=None, label=None, delta_t=0):
+def give_mimicry_folder4(folder, database_pairs, function1, function2, tierA, tierB, tier_filter, entity1, entity2, filter=None, label=None, delta_t=0, mimic_choice=None):
     """ The function calculate the mimicry between two lists with a filter.
     
     Args:
@@ -2924,6 +2928,7 @@ def give_mimicry_folder4(folder, database_pairs, function1, function2, tierA, ti
         delta_t (int, optional): Defaults to 0.
                                 Time after which expression occuring still counts as mimicry.
                                 Should be in the same unit as the times in lstA and lstB 
+        mimic_choice (string, optional): It has to be B/A (A mimicking B) or A/B (B mimicking A). Defaults to None.
     Returns:
         list: A list of tuples [(count, probability),....]
     """
@@ -2956,7 +2961,10 @@ def give_mimicry_folder4(folder, database_pairs, function1, function2, tierA, ti
             LA.append((0, 0, 0, 0))
         if len(LB)==0:
             LB.append((0, 0, 0, 0))
-        count_proba.append(give_mimicry(LA, LB, delta_t))
+        if mimic_choice=='A/B':
+            count_proba.append(give_mimicry(LA, LB, delta_t))
+        elif mimic_choice=='B/A':
+            count_proba.append(give_mimicry(LB, LA, delta_t))
         n+=2
     M=[]
     for i in count_proba:

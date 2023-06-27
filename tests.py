@@ -15,6 +15,7 @@ expressions = ["Smiles_0", "Laughs_0"]
 laughs_intensities = tier_lists['Laughs_0']
 smiles_intensities = tier_lists['Smiles_0']
 delta = 0
+mimic_choice = 'B\A'
 ##################################################
 
 probabilities_matrix_3 = []
@@ -58,7 +59,8 @@ for i, database in enumerate(databases_name):
                 for entityB in entitiesB:
                     for pair_index, (entity1, entity2) in enumerate(entity_pairs):
                         # Get the statistics for each entity of Role (spk or lsn)
-                        list_mimicry_SL_by_role = give_mimicry_folder4(databases_list, database.lower(), get_tier_from_tier, get_tier_from_tier, expression_choiceA, expression_choiceB, 'Role', entity1=entity1, entity2=entity2, filter='Intensity', label=[str.lower(entityA), str.lower(entityB)], delta_t=delta)
+                        list_mimicry_SL_by_role = give_mimicry_folder4(databases_list, database.lower(), get_tier_from_tier, get_tier_from_tier, expression_choiceA, expression_choiceB, tier_filter='Role', entity1=entity1, entity2=entity2, filter='Intensity', label=[str.lower(entityA), str.lower(entityB)], delta_t=delta, mimic_choice=mimic_choice)
+                        print(list_mimicry_SL_by_role)
                         moyenne_prob_interaction_3 = 0
                         for item in list_mimicry_SL_by_role:
                             moyenne_prob_interaction_3 += item[1]
@@ -88,8 +90,8 @@ for i, database in enumerate(databases_name):
                 for y in range(num_entities_B):
                     text_color_spk = 'black'
                     text_color_lsn = 'black'
-                    ax_1.text(y, x, f'{probabilities_matrix_1[x, y]:.2f}', ha='center', va='center', color=text_color_spk)
-                    ax_2.text(y, x, f'{probabilities_matrix_2[x, y]:.2f}', ha='center', va='center', color=text_color_lsn)
+                    ax_1.text(y, x, f'{probabilities_matrix_1[x, y]:.5f}', ha='center', va='center', color=text_color_spk)
+                    ax_2.text(y, x, f'{probabilities_matrix_2[x, y]:.5f}', ha='center', va='center', color=text_color_lsn)
 
             # Customize the plots for spk
             ax_1.set_xticks(np.arange(num_entities_B))
@@ -115,4 +117,3 @@ for i, database in enumerate(databases_name):
 
     # Show the plot
     plt.show()
-                
