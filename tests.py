@@ -59,7 +59,6 @@ for i, database in enumerate(databases_name):
                     for pair_index, (entity1, entity2) in enumerate(entity_pairs):
                         # Get the statistics for each entity of Role (spk or lsn)
                         list_mimicry_SL_by_role = give_mimicry_folder4(databases_list, database.lower(), get_tier_from_tier, get_tier_from_tier, expression_choiceA, expression_choiceB, tier_filter='Role', entity1=entity1, entity2=entity2, filter='Intensity', label=[str.lower(entityA), str.lower(entityB)], delta_t=delta, mimic_choice='B/A')
-                        print(list_mimicry_SL_by_role)
                         moyenne_prob_interaction_3 = 0
                         for item in list_mimicry_SL_by_role:
                             moyenne_prob_interaction_3 += item[1]
