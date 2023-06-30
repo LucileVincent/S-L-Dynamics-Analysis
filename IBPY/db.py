@@ -293,3 +293,34 @@ def get_db_from_func_no_pair_tier(dir, func, database_names, tier1, tier2, entit
     
     dg = list_to_df(dg, func(L[0][0], L[0][1], tier1, tier2, entity)[1])
     return dg
+
+def get_db_from_func_tier(dir, func, database, tier1, tier2, entity):
+    """This function takes a path as an argument and creates a dataset 
+        based on the number of items in the folder using a chosen function.
+    It doesn't take into account pairs in our datasets.
+
+    Args:
+        dir (str) : Path of the folder containing all databases.
+        func (function): Function we want to use.
+        database_names (str): Database name.
+        tier1 (str): First tier name.
+        tier2 (str): Second tier name.
+        entity (str): Entity name of tier1.
+    Returns:
+        dataframe: A dataframe corresponding to the function chosen.
+    """
+    n = 0
+    L = []
+    for path in os.listdir(dir):
+        if os.path.isdir(os.path.join(dir, path)):
+            n += 1
+            if path == database:
+                L.append((get_all_filepaths((os.path.join(dir, path)), "eaf", None) , path))
+
+    dg = []
+    for i in range (len(L)):
+        dg += func(L[i][0], L[i][1], tier1, tier2, entity)[0]
+
+    
+    dg = list_to_df(dg, func(L[0][0], L[0][1], tier1, tier2, entity)[1])
+    return dg
