@@ -17,99 +17,129 @@ smiles_intensities = tier_lists['Smiles_0']
 ##################################################
 lstA = {}
 lstB = {}
+expression_pairs = [("Smiles_0", "Smiles_0"), 
+                    ("Smiles_0", "Laughs_0"), 
+                    ("Laughs_0", "Laughs_0"), 
+                    ("Laughs_0", "Smiles_0"), 
+                    ("Role", "Role")]
+
 overlapping_segments_dict = {}
-total_durations = []
+
 for i, database in enumerate(databases_name):
     if database == databases_pairs[i].replace('_pairs', '').upper():
         databases_list = databases_pair_paths[databases_pairs[i]]
         dataset_dict = {}
+
         for i in range(0, len(databases_list), 2):
             filepath_A = databases_list[i]
-            filepath_B = databases_list[i+1] 
+            filepath_B = databases_list[i+1]
             pair_file_A = os.path.basename(filepath_A)
             pair_file_B = os.path.basename(filepath_B)
 
             if pair_file_A and pair_file_B:
-                pair_name = f"{pair_file_A}_&_{pair_file_B}"
+                pair_name = f"{pair_file_B}_&_{pair_file_A}"
 
             pair_dict = {}
-            lstA_tier = get_tier_from_file(filepath_A, "Role")
-            lstB_tier = get_tier_from_file(filepath_B, "Role")
+            overlapping_data = {}
+            for tier_A, tier_B in expression_pairs:
+                lstA_tier = get_tier_from_file(filepath_A, tier_A)
+                lstB_tier = get_tier_from_file(filepath_B, tier_B)
 
-            if "Role" in lstA:
-                lstA["Role"].extend(lstA_tier["Role"])
-            else:
-                lstA["Role"] = lstA_tier["Role"]
+                if tier_A in lstA:
+                    lstA[tier_A].extend(lstA_tier[tier_A])
+                else:
+                    lstA[tier_A] = lstA_tier[tier_A]
 
-            if "Role" in lstB:
-                lstB["Role"].extend(lstB_tier["Role"])
-            else:
-                lstB["Role"] = lstB_tier["Role"]
-            total_duration = 0
-            for segA in lstA_tier["Role"]:
-                if segA[2].replace(" ", "") == "spk":
-                    total_duration += segA[1] - segA[0]
-            total_durations.append(total_duration)
-            overlapping_segments = get_overlapping_segments(lstA_tier["Role"], lstB_tier["Role"])
-            pair_dict["Role"] = {'Segments': overlapping_segments}
+                if tier_B in lstB:
+                    lstB[tier_B].extend(lstB_tier[tier_B])
+                else:
+                    lstB[tier_B] = lstB_tier[tier_B]
+                
 
-            dataset_dict[pair_name] = pair_dict
+                overlapping_segments = get_overlapping_segments(lstA_tier[tier_A], lstB_tier[tier_B])
+                overlapping_data[f"{tier_A} vs {tier_B}"] = {'Segments': overlapping_segments}
+
+            dataset_dict[pair_name] = overlapping_data
 
         overlapping_segments_dict[database] = dataset_dict
-print(total_durations)
+
 dataframes = {}
-i=0
+overlap_segments_set = set()
 for database, dataset_dict in overlapping_segments_dict.items():
-    tiers = ["Role"]
-    data = {tier: [] for tier in tiers}
+    overlap_percentage_list = []
     for pair_name, pair_dict in dataset_dict.items():
-        for tier in tiers:
-            segments = pair_dict[tier]['Segments']
-            if not segments:
-                overlap_duration = 0
-                percentage = 0
-            else:
-                overlap_duration = 0
-                for segmentA, segmentB in segments.items():
-                    for seg in segmentB:
-                        if seg[2].replace(" ", "") == "spk" and segmentA[2].replace(" ", "") == "spk":
-                            if seg[0] > segmentA[0] and seg[1] < segmentA[1]:
-                                overlap_duration += seg[1] - seg[0]
-                            elif seg[0] < segmentA[0] and seg[1] > segmentA[1]:
-                                overlap_duration += segmentA[1] - segmentA[0]
-                            elif seg[0] < segmentA[0] and seg[1] < segmentA[1]:
-                                overlap_duration += seg[1] - segmentA[0]
-                            elif seg[0] > segmentA[0] and seg[1] > segmentA[1]:
-                                overlap_duration += segmentA[1] - seg[0]
-                percentage = overlap_duration / total_durations[i] * 100
-            data[tier].append({
-                'Pairs filenames': pair_name,
-                'Overlap Percentage for speaker (%)': percentage,
-                'Total Tier Duration for speaker (ms)': total_durations[i],
-                'Overlap Duration for speaker (ms)': overlap_duration
-            })
-        i+=1
-    dfs = []
-    for tier in tiers:
-        df = pd.DataFrame(data[tier])
-        dfs.append(df)
-
-    df_merged = pd.concat(dfs, axis=1)
-    df_merged = df_merged.loc[:, ~df_merged.columns.duplicated()]
-    df_filter = df_merged.filter(like='Overlap Percentage for')
-    df_merged = df_merged.drop(df_filter.columns, axis=1)
-    df_total = df_merged.sum(numeric_only=True)
-    df_total['Pairs filenames'] = 'Total'
-
-    for tier in ["Role"]:
-        overlap_duration_col = 'Overlap Duration for speaker (ms)'
-        total_duration_col = 'Total Tier Duration for speaker (ms)'
-        overlap_percentage_col = 'Overlap Percentage for speaker (%)'
-        df_total[overlap_percentage_col] = (df_total[overlap_duration_col] / df_total[total_duration_col]) * 100
-    df_merged = pd.concat([df_merged, df_filter], axis=1)
-    df_merged = pd.concat([df_merged, pd.DataFrame(df_total).T], ignore_index=True)
-    dataframes[database] = df_merged
+        overlap_duration_spk_vs_lsn = 0
+        overlap_duration_lsn_vs_spk = 0
+        percentage_spk_vs_lsn = 0
+        percentage_lsn_vs_spk = 0
+        duration = 0
+        segments = pair_dict["Role vs Role"]["Segments"]
+        expression = [("Smiles_0", "Smiles_0"), ("Laughs_0", "Laughs_0"), ("Smiles_0", "Laughs_0"), ("Laughs_0", "Smiles_0")]
+        for segmentA, segmentB in segments.items():
+            for segB in segmentB:
+                segment_key = f"{segB}"
+                if segment_key not in overlap_segments_set:
+                    overlap_segments_set.add(segment_key)
+                    # Check if A is "spk" and B is "lsn"
+                    if (segmentA[2].replace(" ", "") == "spk" and segB[2].replace(" ", "") == "lsn"):
+                        for tierA, tierB in expression:
+                            segments_tier = pair_dict[f"{tierA} vs {tierB}"]["Segments"]   
+                            for A, B in segments_tier.items():
+                                if A[0] < segB[1] and A[1] > segB[0]:
+                                    for b in B:
+                                        if b[0] < segB[1] and b[1] > segB[0]:
+                                            tier_key = f"{b}"
+                                            if tier_key not in overlap_segments_set:
+                                                overlap_segments_set.add(tier_key)
+                                                if b[0] > A[0] and b[1] < A[1]:
+                                                    overlap_duration_spk_vs_lsn += b[1] - b[0]
+                                                    duration += A[1] - A[0]
+                                                elif b[0] < A[0] and b[1] > A[1]:
+                                                    overlap_duration_spk_vs_lsn += A[1] - A[0]
+                                                    duration += b[1] - b[0]
+                                                elif b[0] < A[0] and b[1] < A[1]:
+                                                    overlap_duration_spk_vs_lsn += b[1] - A[0]
+                                                    duration += (A[1] - b[0]) - (b[1] - A[0])
+                                                elif b[0] > A[0] and b[1] > A[1]:
+                                                    overlap_duration_spk_vs_lsn += A[1] - b[0]
+                                                    duration += (b[1] - A[0]) - (A[1] - b[0])
+                    # Check if A is "lsn" and B is "spk"
+                    elif (segmentA[2].replace(" ", "") == "lsn" and segB[2].replace(" ", "") == "spk"):
+                        for tierA, tierB in expression:
+                            segments_tier = pair_dict[f"{tierA} vs {tierB}"]["Segments"]   
+                            for A, B in segments_tier.items():
+                                if A[0] < segB[1] and A[1] > segB[0]:
+                                    for b in B:
+                                        if b[0] < segB[1] and b[1] > segB[0]:
+                                            tier_key = f"{b}"
+                                            if tier_key not in overlap_segments_set:
+                                                overlap_segments_set.add(tier_key)
+                                                if b[0] > A[0] and b[1] < A[1]:
+                                                    overlap_duration_lsn_vs_spk += b[1] - b[0]
+                                                    duration += A[1] - A[0]
+                                                elif b[0] < A[0] and b[1] > A[1]:
+                                                    overlap_duration_lsn_vs_spk += A[1] - A[0]
+                                                    duration += b[1] - b[0]
+                                                elif b[0] < A[0] and b[1] < A[1]:
+                                                    overlap_duration_lsn_vs_spk += b[1] - A[0]
+                                                    duration += (A[1] - b[0]) - (b[1] - A[0])
+                                                elif b[0] > A[0] and b[1] > A[1]:
+                                                    overlap_duration_lsn_vs_spk += A[1] - b[0]    
+                                                    duration += (b[1] - A[0]) - (A[1] - b[0])     
+                break
+        if duration != 0 :
+            percentage_spk_vs_lsn = overlap_duration_spk_vs_lsn / (duration) * 100
+            percentage_lsn_vs_spk = overlap_duration_lsn_vs_spk / (duration) * 100
+        overlap_percentage_list.append({
+            'Database': database,
+            'Pair': pair_name,
+            'Overlap Percentage for B spk / A lsn - S&L': percentage_spk_vs_lsn,
+            'Overlap Percentage for B lsn / A spk - S&L': percentage_lsn_vs_spk,
+        })
+    df_overlap_percentage = pd.DataFrame(overlap_percentage_list)
+    dataframes[database] = df_overlap_percentage
 
 for database, df in dataframes.items():
-    display(Markdown(f"**Database: {database}**"))
+    display(Markdown(f"### {database}"))
     display(df)
+    print("\n")
