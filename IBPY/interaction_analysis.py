@@ -1,4 +1,7 @@
+import os 
+import pandas as pd
 from .utils import overlapping_dct_from_indices_to_vals
+from .extract_data import get_tier_from_file
 
 def get_overlapping_segments_ind(lstA, lstB):  
     """Get segments in A and B that overlap.
@@ -394,7 +397,7 @@ def get_overlapping_seg(A, B):
 
     return lst
 
-def overlap_count_SL(databases_name, databases_pairs, expression_pairs, expressions_track, choice):
+def overlap_count_SL(databases_name, databases_pairs, databases_pair_paths, expression_pairs, expressions_track, choice):
     """
     This function returns the number and percentage of overlapping segments of smiles and laughs between two persons for each pair of files.
     When we talk about overlapping between person A to person B, this means that we are looking at all the 
@@ -407,6 +410,7 @@ def overlap_count_SL(databases_name, databases_pairs, expression_pairs, expressi
     Args:
         databases_name (list): list of databases names
         databases_pairs (list): list of databases pairs names
+        databases_pair_paths (dict): dictionary of databases pairs paths
         expression_pairs (list): list of expressions pairs names. For example : [("Smiles_0", "Smiles_0"), 
                                                                                  ("Smiles_0", "Laughs_0"), 
                                                                                  ("Laughs_0", "Laughs_0"), 
@@ -581,7 +585,7 @@ def overlap_count_SL(databases_name, databases_pairs, expression_pairs, expressi
         dataframes[database] = df_overlap_count
     return dataframes
 
-def overlap_count_SL_advanced(databases_name, databases_pairs, expression_pairs, expressions_track, choice):
+def overlap_count_SL_advanced(databases_name, databases_pairs, databases_pair_paths, expression_pairs, expressions_track, choice):
     """
     This function returns the number and percentage of overlapping segments of smiles vs smiles, laughs vs smiles, smiles vs laughs and laughs vs laughs between two persons for each pair of files.
     When we talk about overlapping between person A to person B, this means that we are looking at all the 
@@ -594,6 +598,7 @@ def overlap_count_SL_advanced(databases_name, databases_pairs, expression_pairs,
     Args:
         databases_name (list): list of databases names
         databases_pairs (list): list of databases pairs names
+        databases_pair_paths (dict): dictionary of databases pairs paths
         expression_pairs (list): list of expressions pairs names. For example : [("Smiles_0", "Smiles_0"), 
                                                                                  ("Smiles_0", "Laughs_0"), 
                                                                                  ("Laughs_0", "Laughs_0"), 
@@ -791,7 +796,7 @@ def overlap_count_SL_advanced(databases_name, databases_pairs, expression_pairs,
         dataframes[database] = df_overlap_count
     return dataframes
 
-def overlap_total_duration_B(databases_name, databases_pairs, expression_pairs, expressions_track, choice):
+def overlap_total_duration_B(databases_name, databases_pairs, databases_pair_paths, expression_pairs, expressions_track, choice):
     """
     This function returns the duration and percentage of overlapping segments of smiles and laughs between two persons for each pair of files.
     The total duration is calculated by adding all the segments of the tier concerned of the file B (or the second files if you prefered).
@@ -805,6 +810,7 @@ def overlap_total_duration_B(databases_name, databases_pairs, expression_pairs, 
     Args:
         databases_name (list): list of databases names
         databases_pairs (list): list of databases pairs names
+        databases_pair_paths (dict): dictionary of databases pairs paths
         expression_pairs (list): list of expressions pairs names. For example : [("Smiles_0", "Smiles_0"), 
                                                                                  ("Smiles_0", "Laughs_0"), 
                                                                                  ("Laughs_0", "Laughs_0"), 
@@ -1006,7 +1012,7 @@ def overlap_total_duration_B(databases_name, databases_pairs, expression_pairs, 
         dataframes[database] = df_overlap_count
     return dataframes
 
-def overlap_total_duration_A(databases_name, databases_pairs, expression_pairs, expressions_track, choice):
+def overlap_total_duration_A(databases_name, databases_pairs, databases_pair_paths, expression_pairs, expressions_track, choice):
     """
     This function returns the duration and percentage of overlapping segments of smiles and laughs between two persons for each pair of files.
     The total duration is calculated by adding all the segments of the tier concerned of the file A (or the first files if you prefered).
@@ -1020,6 +1026,7 @@ def overlap_total_duration_A(databases_name, databases_pairs, expression_pairs, 
     Args:
         databases_name (list): list of databases names
         databases_pairs (list): list of databases pairs names
+        databases_pair_paths (dict): dictionary of databases pairs paths
         expression_pairs (list): list of expressions pairs names. For example : [("Smiles_0", "Smiles_0"), 
                                                                                  ("Smiles_0", "Laughs_0"), 
                                                                                  ("Laughs_0", "Laughs_0"), 
@@ -1221,7 +1228,7 @@ def overlap_total_duration_A(databases_name, databases_pairs, expression_pairs, 
         dataframes[database] = df_overlap_count
     return dataframes
 
-def overlap_total_duration_union(databases_name, databases_pairs, expression_pairs, expressions_track, choice):
+def overlap_total_duration_union(databases_name, databases_pairs, databases_pair_paths, expression_pairs, expressions_track, choice):
     """
     This function returns the duration and percentage of overlapping segments of smiles and laughs between two persons for each pair of files.
     The total duration is calculated by adding all the segments of the tier concerned of the two pair files (we do the union of the segments).
@@ -1235,6 +1242,7 @@ def overlap_total_duration_union(databases_name, databases_pairs, expression_pai
     Args:
         databases_name (list): list of databases names
         databases_pairs (list): list of databases pairs names
+        databases_pair_paths (dict): dictionary of databases pairs paths
         expression_pairs (list): list of expressions pairs names. For example : [("Smiles_0", "Smiles_0"), 
                                                                                  ("Smiles_0", "Laughs_0"), 
                                                                                  ("Laughs_0", "Laughs_0"), 
@@ -1439,7 +1447,7 @@ def overlap_total_duration_union(databases_name, databases_pairs, expression_pai
         dataframes[database] = df_overlap_count
     return dataframes
 
-def overlap_percentage_B(databases_name, databases_pairs, expression_pairs, expressions_track, choice):
+def overlap_percentage_B(databases_name, databases_pairs, databases_pair_paths, expression_pairs, expressions_track, choice):
     '''
     This function calculates the overlap percentage between two person for each pair of files.
     The total duration is calculated by adding the duration of the overlapping segments of the second person.
@@ -1453,6 +1461,7 @@ def overlap_percentage_B(databases_name, databases_pairs, expression_pairs, expr
     Args:
         databases_name: list of databases names.
         databases_pairs: list of databases pairs names.
+        databases_pair_paths: dictionary of databases pairs paths.
         expression_pairs: list of expression pairs to study. For example : [("Smiles_0", "Smiles_0"), 
                                                                             ("Smiles_0", "Laughs_0"), 
                                                                             ("Laughs_0", "Laughs_0"), 
@@ -1646,7 +1655,7 @@ def overlap_percentage_B(databases_name, databases_pairs, expression_pairs, expr
         dataframes[database] = df_overlap_percentage
     return dataframes
 
-def overlap_percentage_A(databases_name, databases_pairs, expression_pairs, expressions_track, choice):
+def overlap_percentage_A(databases_name, databases_pairs, databases_pair_paths, expression_pairs, expressions_track, choice):
     '''
     This function calculates the overlap percentage between two person for each pair of files.
     The total duration is calculated by adding the duration of the overlapping segments of the first person.
@@ -1660,6 +1669,7 @@ def overlap_percentage_A(databases_name, databases_pairs, expression_pairs, expr
     Args:
         databases_name: list of databases names.
         databases_pairs: list of databases pairs names.
+        databases_pair_paths: dictionary of databases pairs paths.
         expression_pairs: list of expression pairs to study. For example : [("Smiles_0", "Smiles_0"), 
                                                                             ("Smiles_0", "Laughs_0"), 
                                                                             ("Laughs_0", "Laughs_0"), 
@@ -1853,7 +1863,7 @@ def overlap_percentage_A(databases_name, databases_pairs, expression_pairs, expr
         dataframes[database] = df_overlap_percentage
     return dataframes
 
-def overlap_percentage_union(databases_name, databases_pairs, expression_pairs, expressions_track, choice):
+def overlap_percentage_union(databases_name, databases_pairs, databases_pair_paths, expression_pairs, expressions_track, choice):
     '''
     This function calculates the overlap percentage between two person for each pair of files.
     The total duration is calculated by adding the duration of the two overlapping segments of the two person.
@@ -1867,6 +1877,7 @@ def overlap_percentage_union(databases_name, databases_pairs, expression_pairs, 
     Args:
         databases_name: list of databases names.
         databases_pairs: list of databases pairs names.
+        databases_pair_paths: dictionary of databases pairs paths.
         expression_pairs: list of expression pairs to study. For example : [("Smiles_0", "Smiles_0"), 
                                                                             ("Smiles_0", "Laughs_0"), 
                                                                             ("Laughs_0", "Laughs_0"), 
@@ -2073,7 +2084,7 @@ def overlap_percentage_union(databases_name, databases_pairs, expression_pairs, 
     return dataframes
 
 ## TO IMPROVE ##
-def overlap_count(databases_name, databases_pairs, choice, tier="Role"):
+def overlap_count(databases_name, databases_pairs, databases_pair_paths, choice, tier="Role"):
     """
     This function returns the number of overlapping segments of a specific tier between two persons for each pair of files.
     When we talk about overlapping between person A to person B, this means that we are looking at all the 
@@ -2086,6 +2097,7 @@ def overlap_count(databases_name, databases_pairs, choice, tier="Role"):
     Args:
         databases_name (list): list of databases names
         databases_pairs (list): list of databases pairs names
+        databases_pair_paths (dict): dictionary of databases pairs paths
         choice (str): choice between "A/B" for  or "B/A". For example : "A/B" for overlapping between person A to person B 
                       or "B/A" for the opposite.
         tier (str): tier name. Default: "Role"
@@ -2152,7 +2164,6 @@ def overlap_count(databases_name, databases_pairs, choice, tier="Role"):
             overlap_count_spk_lsn = 0
             overlap_count_lsn_spk = 0
             segments = pair_dict[tier]["Segments"]
-            entities = tier_lists[tier]
             if person1 == "A":
                 for segmentA, segmentB in segments.items():
                     for segB in segmentB:
